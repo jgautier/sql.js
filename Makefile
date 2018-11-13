@@ -23,8 +23,8 @@ js/sql%.js: js/shell-pre.js js/sql%-raw.js js/shell-post.js
 js/sql%-raw.js: c/sqlite3.bc c/extension-functions.bc js/api.js exported_functions
 	$(EMCC) $(EMFLAGS) -s EXPORTED_FUNCTIONS=@exported_functions -s EXTRA_EXPORTED_RUNTIME_METHODS=@exported_runtime_methods c/extension-functions.bc c/sqlite3.bc --post-js js/api.js -o $@ ;\
 
-js/api.js: coffee/api.coffee coffee/exports.coffee coffee/api-data.coffee
-	cat $^ | coffee --bare --compile --stdio > $@
+js/api.js: coffee/api.coffee
+	cat $^ | coffee --bare --compile --transpile --stdio > $@
 
 # Web worker API
 worker: js/worker.sql.js
@@ -46,5 +46,3 @@ module.tar.gz: test package.json AUTHORS README.md js/sql.js
 
 clean:
 	rm -rf js/sql.js js/api.js js/sql*-raw.js js/worker.sql.js js/worker.js js/sql-memory-growth.js c/sqlite3.bc c/extension-functions.bc
-
-
